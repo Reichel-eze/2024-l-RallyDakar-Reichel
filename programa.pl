@@ -328,6 +328,13 @@ destinoMasLejano(Vehiculo, Origen, DestinoMasLejano) :-
     puedeLlegarSinParar(Vehiculo, Origen, DestinoMasLejano),  % primero que pueda llegar al destino mas lejano
     forall(otroDestinoPosible(Vehiculo, Origen, DestinoMasLejano, OtroDestino), estaMasCerca(OtroDestino, Origen, DestinoMasLejano)). % para todos aquellos otros destinos posibles, dichos destinos son mas cercarnos al destino mas lejano
                                                                                                                                       % es decir para todo otro destino posible, está más cerca del origen (distancia menor desde origen)
+% Otra forma de pensarlo es que no existe un destino que esté más lejos (distancia mayor desde origen)
+% destinoMasLejano(Vehiculo, Origen, Destino):-
+
+destinoMasLejanoNOT(Vehiculo, Origen, DestinoMasLejano) :-
+    puedeLlegarSinParar(Vehiculo, Origen, DestinoMasLejano),
+    not((otroDestinoPosible(Vehiculo, Origen, DestinoMasLejano, OtroDestino), estaMasLejos(OtroDestino, Origen, DestinoMasLejano))).
+
 puedeLlegarSinParar(Vehiculo, Origen, Destino) :-    % puede llegar sin parar si puede recorrer la distancia que hay entre el origen y el destino
     cuantosKilometros(Origen, Destino, Distancia),
     puedeRecorrerSinParar(Vehiculo, Distancia).
@@ -336,6 +343,11 @@ estaMasCerca(DestinoCercano, Origen, Destino) :-
     cuantosKilometros(Origen, Destino, Distacia),
     cuantosKilometros(Origen, DestinoCercano, DistanciaCercana),
     DistanciaCercana < Distacia.
+
+estaMasLejos(DestinoLejano, Origen, Destino) :-
+    cuantosKilometros(Origen, Destino, Distacia),
+    cuantosKilometros(Origen, DestinoLejano, DistaciaLejana),
+    DistaciaLejana > Distacia.
 
 otroDestinoPosible(Vehiculo, Origen, Destino, OtroDestino) :-
     puedeLlegarSinParar(Vehiculo, Origen, Destino),
